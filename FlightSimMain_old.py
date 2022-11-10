@@ -229,7 +229,7 @@ fin_area = 0.0065366                # area of one fin [m^2]
 lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters)
 lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
 Kp = 0.01                          # proportional gain
-Kd = 0.01                            # derivative gain
+Kd = 0.00                            # derivative gain
 
 
 p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_sim = simulate(t_ignite, Kp, Kd, drop_height, fin_area, lever_c, lever_f,wind,omega_init)

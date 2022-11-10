@@ -163,7 +163,7 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
     end_prop = int(ignite_index + burn_time*100)
     t = t_sim[:len(p)]
 
-    fig, ((ax1)) = plt.subplots(1, 1)    
+    fig, ((ax1, ax2)) = plt.subplots(2, 1, sharex=True)    
 
     line_alt, = ax1.plot(t,p[:,2],label='Altitude [m]')
     line_vel, = ax1.plot(t,v[:,2],label='Vertical Velocity [m/s]')
@@ -175,14 +175,21 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
     ax1.set_ylim(-20, 40)
     ax1.set_xlim(0, 5)
 
+    line_angle, = ax2.plot(t,np.rad2deg(z_angle[:]))
+    ax2.set_ylabel('Angle [degrees]')
+    ax2.set_ylim(0, 20)
+    angle_text = ax2.set_title('VLR Angle from Vertical Axis')
+
     fig.subplots_adjust(bottom=0.25)
-    ax_ignition = fig.add_axes([0.25, 0.1, 0.65, 0.03])
-    ax_height = fig.add_axes([0.25, 0.05, 0.65, 0.03])
+    ax_ignition = fig.add_axes([0.25, 0.20, 0.65, 0.03])
+    ax_height = fig.add_axes([0.25, 0.15, 0.65, 0.03])
+    ax_p = fig.add_axes([0.25, 0.10, 0.65, 0.03])
+    ax_d = fig.add_axes([0.25, 0.05, 0.65, 0.03])
 
     ignition_slider = Slider(
         ax=ax_ignition,
         label='Ignition Delay [s]',
-        valmin=-2.0,
+        valmin=0.0,
         valmax=3,
         valinit=1.2,
     )  
@@ -191,20 +198,39 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
         label='Drop Height [m]',
         valmin=0.1,
         valmax=30,
-        valinit=15,
+        valinit=drop_height,
+    )
+    p_slider = Slider(
+        ax=ax_p,
+        label='P gain',
+        valmin=0.0,
+        valmax=3,
+        valinit=0.01,
+    )
+    d_slider = Slider(
+        ax=ax_d,
+        label='D gain',
+        valmin=-0.5,
+        valmax=3,
+        valinit=0,
     )
 
 
 
     # The function to be called anytime a slider's value changes
     def update(val):
-
-        p,v,acc,z_i,z_angle,q,phi_save,theta_save,_,burn_time,t_sim = simulate(ignition_slider.val, Kp, Kd, height_slider.val, fin_area, lever_c, lever_f,wind,omega_init)
+        max_wind = 1.7
+        wind = np.random.rand(3)*2*max_wind/np.sqrt(3) - (max_wind/np.sqrt(3))*np.ones(3)
+        omega_init = np.random.rand(3)*0.2 - 0.1*np.ones(3)
+        p,v,acc,z_i,z_angle,q,phi_save,theta_save,_,burn_time,t_sim = simulate(ignition_slider.val, p_slider.val, d_slider.val, height_slider.val, fin_area, lever_c, lever_f, wind, omega_init)
         t = t_sim[:len(p)]
         line_alt.set_data(t, p[:,2])
         line_vel.set_data(t,v[:,2])
         line_acc.set_data(t,acc[:,2])
         line_gnd.set_data(t, np.zeros_like(t))
+
+        line_angle.set_data(t,np.rad2deg(z_angle[:]))
+        angle_text.set_text(f"Angle from vertical. Wind: {np.round(np.linalg.norm(wind),2)}, Omegainit: {np.round(np.linalg.norm(omega_init),2)},")
         print("update")
 
         fig.canvas.draw_idle()
@@ -214,6 +240,8 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
     # register the update function with each slider
     ignition_slider.on_changed(update)
     height_slider.on_changed(update)
+    p_slider.on_changed(update)
+    d_slider.on_changed(update)
 
 
 
@@ -228,11 +256,13 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
 t_ignite = 1.2                       # time between rocket release and rocket ignition (sec)
 drop_height = 20                    # meters
 # drop_height = 30                    # meters
-wind = np.array([0.75,0.5,0.])      # (m/s)
+wind = np.array([1.4,1,0.])      # (m/s)
 # wind = np.array([0.,0.,0.])      # (m/s)
 omega_init = np.array([0.2, 0.3, 0])  # initial angular velocity rocket at release (rad/sec)
 fin_area = 0.0065366                # area of one fin [m^2]
-lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters)
+# lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters)
+lever_f = np.array([0,0,0.26])      # vector from cg of fin to cp (meters) 11/10/22
+# lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
 lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
 Kp = 0.01                          # proportional gain
 Kd = 0.01                            # derivative gain
