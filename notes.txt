@@ -7,4 +7,18 @@ CMA-ES: (ignition, P, D)
 
 
 drop: 1:03.85
+fire: 1:05.80
+
+rreal: 2
+sim: 1.56
+diff: 0.44
+
+1.18 - 0.44 = 0.74
+
+
+
+sim of 1 s delay: 1.45
+real 1s delay: 1.95
+
+1.18-0.5=0.67
 
