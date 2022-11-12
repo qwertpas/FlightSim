@@ -219,7 +219,7 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
 
 #-------- Single Simulation --------%
 #Simulation setup
-t_ignite = 0.4                       # time between rocket release and rocket ignition (sec)
+t_ignite = 1.18                       # time between rocket release and rocket ignition (sec)
 drop_height = 20                    # meters
 # drop_height = 30                    # meters
 wind = np.array([0.75,0.5,0.])      # (m/s)
@@ -228,10 +228,10 @@ omega_init = np.array([0.2, 0.3, 0])  # initial angular velocity rocket at relea
 fin_area = 0.0065366                # area of one fin [m^2]
 lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters)
 lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
-Kp = 0.01                          # proportional gain
-Kd = 0.00                            # derivative gain
+Kp = 0.0424                          # proportional gain
+Kd = 0.002                            # derivative gain
 
-
+# 1.17559755 0.04238408 0.00320697
 p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_sim = simulate(t_ignite, Kp, Kd, drop_height, fin_area, lever_c, lever_f,wind,omega_init)
 
 print(v[:,2])
