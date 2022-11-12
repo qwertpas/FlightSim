@@ -204,14 +204,14 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
         ax=ax_p,
         label='P gain',
         valmin=0.0,
-        valmax=3,
+        valmax=0.5,
         valinit=0.01,
     )
     d_slider = Slider(
         ax=ax_d,
         label='D gain',
         valmin=-0.5,
-        valmax=3,
+        valmax=1,
         valinit=0,
     )
 
@@ -255,15 +255,13 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
 #Simulation setup
 t_ignite = 1.2                       # time between rocket release and rocket ignition (sec)
 drop_height = 20                    # meters
-# drop_height = 30                    # meters
 wind = np.array([1.4,1,0.])      # (m/s)
 # wind = np.array([0.,0.,0.])      # (m/s)
 omega_init = np.array([0.2, 0.3, 0])  # initial angular velocity rocket at release (rad/sec)
 fin_area = 0.0065366                # area of one fin [m^2]
-# lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters)
+# lever_f = np.array([0,0,0.32])      # vector from cg of fin to cp (meters) DEFAULT
 lever_f = np.array([0,0,0.26])      # vector from cg of fin to cp (meters) 11/10/22
-# lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
-lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters)
+lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (meters) KEEP SAME
 Kp = 0.01                          # proportional gain
 Kd = 0.01                            # derivative gain
 

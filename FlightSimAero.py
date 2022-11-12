@@ -1,6 +1,9 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
+def cross(a:np.ndarray,b:np.ndarray)->np.ndarray:
+    return np.cross(a,b)
+
 class aero_simulator:
     def __init__(self, lever_f, lever_c, fin_area, side_area):
         self.lever_f = lever_f    #length from cp of fin to cg (meters)
@@ -22,8 +25,8 @@ class aero_simulator:
         area_c = self.side_area 
         ff_lever_c = np.linalg.norm(self.lever_c)*z_i #translate lever arms to fixed frame
         ff_lever_f = np.linalg.norm(self.lever_f)*z_i
-        torque_c = np.cross(ff_lever_c, 0.5*ref_cd*self.rho*area_c*v**2)[0] + np.cross(ff_lever_c, 0.5*ref_cd*self.rho*area_c*wind_area_mod*wind**2)[0] 
-        torque_f = np.cross(ff_lever_f, 0.5*ref_cd*self.rho*area_f*v**2)[0] + np.cross(ff_lever_f, 0.5*ref_cd*self.rho*area_f*wind_area_mod*wind**2)[0] 
+        torque_c = cross(ff_lever_c, 0.5*ref_cd*self.rho*area_c*v**2)[0] + cross(ff_lever_c, 0.5*ref_cd*self.rho*area_c*wind_area_mod*wind**2)[0] 
+        torque_f = cross(ff_lever_f, 0.5*ref_cd*self.rho*area_f*v**2)[0] + cross(ff_lever_f, 0.5*ref_cd*self.rho*area_f*wind_area_mod*wind**2)[0] 
         
         torque_b = (torque_c + torque_f)
 

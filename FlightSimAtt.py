@@ -1,5 +1,8 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
+
+def cross(a:np.ndarray,b:np.ndarray)->np.ndarray:
+    return np.cross(a,b)
 class attitude_simulator:
     def __init__(self, q, w, dt):
         self.moi = np.array([[0.01966931, 0, 0],[0, 0.01965769, 0],[0, 0, 0.0020481811]]) #MOI-Principal Axis
@@ -33,8 +36,9 @@ class attitude_simulator:
         param omega: angular velocity.
         param T: torque
     '''
+
     def Dynamics(self, omega, T):
-        wdot = np.linalg.inv(self.moi)@( T - np.cross( omega,(self.moi @ omega) ) )
+        wdot = np.linalg.inv(self.moi)@( T - cross( omega,(self.moi @ omega) ) )
         return wdot
 
     '''
