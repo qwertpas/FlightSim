@@ -218,7 +218,7 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
 
 
     # The function to be called anytime a slider's value changes
-    def update(val):
+    def update(val=0):
         max_wind = 1.7
         wind = np.random.rand(3)*2*max_wind/np.sqrt(3) - (max_wind/np.sqrt(3))*np.ones(3)
         omega_init = np.random.rand(3)*0.2 - 0.1*np.ones(3)
@@ -244,7 +244,7 @@ def plotOneSim(p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_si
     d_slider.on_changed(update)
 
 
-
+    update()
 
     plt.show()
 
@@ -265,7 +265,7 @@ lever_c = np.array([0,0,0.08671])   # vector from cg of body/legs/cap to cp (met
 # Kp = 0.01                          # proportional gain
 # Kd = 0.01                            # derivative gain
 
-t_ignite, Kp, Kd = [1.17627126,  0.02722138, -0.01042915]
+t_ignite, Kp, Kd = [1.16817465, 0.0084219,  0.01076641]
 
 
 p,v,acc,z_i,z_angle,q,phi_save,theta_save,t_ignite,burn_time,t_sim = simulate(t_ignite, Kp, Kd, drop_height, fin_area, lever_c, lever_f,wind,omega_init)
