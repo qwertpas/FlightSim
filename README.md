@@ -1,4 +1,5 @@
-![rocket](rocket.png)
+<a><img src="rocket.png" align="top" height="600" ></a>
+
 
 We added a slider to the flight sim in order to get a feel of how each value (ignition delay, Kp, and Kd) changes the flight for randomized wind and initial angular velocity, and used it to get a ballpark estimate of the values.
 
@@ -10,7 +11,7 @@ Kp = 0.05±0.03
 
 Kd = 0.002±0.004
 
-![output](output.png)
+<a><img src="output.png" align="top" height="500" ></a>
 
 [Optimizer code here](https://github.com/qwertpas/FlightSim/blob/master/vlr_cma.ipynb)
 
